@@ -2,6 +2,17 @@
 """ FileStorage class """
 
 import json
+from models.base_model import BaseModel
+from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+
+sub_classes = {"BaseModel": BaseModel, "User": User, "State": State,
+               "Place": Place, "City": City, "Amenity": Amenity, "Review": Review}
+
 
 class FileStorage:
     """  serializes instances to a JSON file and deserializes JSON file to instances """
@@ -13,7 +24,7 @@ class FileStorage:
         return self.__objects
 
     def new(self, obj):
-        """ sets in the obj with key <obj class name>.id """
+        """ sets in the obj with key <obj classclasses name>.id """
         key = obj.__class__.__name__ + "." + obj.id
 
     def save(self):
@@ -32,5 +43,7 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r', encoding='UTF-8') as file:
                 jn = json.load(file)
+            for key in jn:
+                self.__objects[key] = sub_classes[jn[key]["__class__"]](**jn[key])
         except FileNotFoundError:
             pass

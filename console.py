@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import cmd
+from models.base_model import BaseModel
 
 class HBNBCommand(cmd.Cmd):
     """ Console HBNBCommand class """
@@ -21,5 +22,28 @@ class HBNBCommand(cmd.Cmd):
         """ an empty line + ENTER shouldn’t execute anything """
         pass
 
+    def do_create(self, line):
+        """ Creates a new instance of BaseModel saves it (to the JSON file) and prints the id """
+        if __class__.__name__ is None:
+            print(' ** class name missing ** ')
+            return
+        
+        try:
+            new_base = line + '()'
+            instance = eval(new_base)
+            print(instance.id)
+            instance.save()
+
+        except Exception as f:
+            print(' ** class doesn\'t exist ** ')
+
+    def do_show(self, line):
+        """ 
+            Prints the string representation of an instance
+            based on the class name and id
+            Ex: $ show BaseModel 1234-1234-1234.
+        """
+
+ 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

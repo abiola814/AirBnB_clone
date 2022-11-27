@@ -2,8 +2,9 @@
 """ BaseModel class"""
 
 import uuid
+
 from datetime import datetime
-from models import storage
+import models
 #datetime format
 dtm = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -18,17 +19,18 @@ class BaseModel:
             for key, value in kwargs.items():
                 if key != '__class__':
                     setattr(self, key, value)
-
-                self.created_at = datetime.strptime(kwargs["created_at"], dtm)
-
-            if hasattr(self, 'updated_at') and type(self.updated_at) is str:
-                self.updated_at = datetime.strptime(kwargs["updated_at"], dtm)
+                elif "created_at" == key:
+                    self.created_at = datetime.strptime(kwargs["created_at"],dtm)
+                elif "updated_at" == key:
+                    self.updated_at = datetime.strptime(kwargs["updated_at"],dtm)
+                else:
+                    pass
 
         else:
             self.id = str(uuid.uuid4())  #Generates a Random id everytime an instance is created
             self.created_at = datetime.now()
             self.updated_at = self.created_at
-            storage.new(self)
+            models.storage.new(self)
 
     def __str__(self):
         """ should print: [<class name>] (<self.id>) <self.__dict__> """
@@ -37,7 +39,7 @@ class BaseModel:
     def save(self):
         """ updates the public instance attribute updated_at with the current datetime """
         self.updated_at = datetime.now()
-        storage.save()
+        models.storage.save()
 
     def to_dict(self):
         """ returns a dictionary containing all keys/values of __dict__ of the instance """

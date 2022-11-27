@@ -28,8 +28,9 @@ class BaseModel:
 
         else:
             self.id = str(uuid.uuid4())  #Generates a Random id everytime an instance is created
-            self.created_at = datetime.now()
-            self.updated_at = self.created_at
+            date_info=datetime.now()
+            self.created_at = date_info
+            self.updated_at = date_info
             models.storage.new(self)
 
     def __str__(self):

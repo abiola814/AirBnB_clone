@@ -11,11 +11,12 @@ from models.review import Review
 from models.state import State
 
 sub_classes = {"BaseModel": BaseModel, "User": User, "State": State,
-               "Place": Place, "City": City, "Amenity": Amenity, "Review": Review}
+                "Place": Place, "City": City, "Amenity": Amenity, "Review": Review}
 
 
 class FileStorage:
     """  serializes instances to a JSON file and deserializes JSON file to instances """
+
     __file_path = "file.json"
     __objects = {}
 
@@ -26,12 +27,13 @@ class FileStorage:
     def new(self, obj):
         """ sets in the obj with key <obj classclasses name>.id """
         key = obj.__class__.__name__ + "." + obj.id
+        self.__objects[key] = obj
 
     def save(self):
         """ serializes __objects to the JSON file (path: __file_path) """ 
         json_obj = {}
-        for key in self.__objects:
-            json_obj[key] = self.__objects[key].to_dict()
+        for key,objects in self.__objects.items():
+            json_obj[key] = objects.to_dict()
         with open(self.__file_path, 'w', encoding='UTF-8') as file:
             json.dump(json_obj, file)
 
@@ -43,7 +45,8 @@ class FileStorage:
         try:
             with open(self.__file_path, 'r', encoding='UTF-8') as file:
                 jn = json.load(file)
-            for key in jn:
-                self.__objects[key] = sub_classes[jn[key]["__class__"]](**jn[key])
+            for key, data in jn.items():
+                obj = sub_classes[data['__class__']](**data)
+                self.__objects[key] =obj
         except FileNotFoundError:
             pass

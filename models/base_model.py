@@ -35,7 +35,7 @@ class BaseModel:
 
     def __str__(self):
         """ should print: [<class name>] (<self.id>) <self.__dict__> """
-        return self.__class__.__name__, self.id, self.__dict__
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """ updates the public instance attribute updated_at with the current datetime """

@@ -1,0 +1,21 @@
+.title{
+    font-size: 30px;
+    text-align: left;
+}
+.all-in-all{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.part-places{
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: #FF5A5F 1px solid; 
+    border-radius: 4px;
+    /* display: inline; */
+}
+.part-place{
+    font-size: 30px;
+    text-align: center;
+}
